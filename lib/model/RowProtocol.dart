@@ -38,5 +38,10 @@ abstract class Row {
 
   }
 
+  String toString(){
+    var fields = this.fields;
 
+    return fields.map((e) => e + " : " + this[e].toString()).join(", ");
+
+  }
 }

@@ -33,7 +33,6 @@ class User extends Row{
     User newRow(){
         return User();
     }
-    @override
-    String toString() => this['nom'] ?? "" ;
+
 }
 
