@@ -2,13 +2,13 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/services.dart';
 import 'package:plans/model/AppStateModel.dart';
 import 'package:provider/provider.dart';
-import 'package:velocity_x/velocity_x.dart';
 import '/model/User.dart';
+import '/model/Pla.dart';
+
 import '/model/SQLDatabase.dart';
-import 'LoginView.dart';
-import 'SignIn.dart';
 import '/routes/MyAppRouterDelegate.dart';
 import 'package:flutter/material.dart';
+import 'HomePage.dart';
 
 void main() {
   runApp(ActivityPlansApp());
@@ -31,6 +31,8 @@ class _ActivityPlansAppState extends State<ActivityPlansApp>{
 
     User user = User();
     db.registerTable(user);
+    Pla pla = Pla();
+    db.registerTable(pla);
     delegate = MyAppRouterDelegate(model, db);
 
     super.initState();
@@ -62,71 +64,5 @@ class _ActivityPlansAppState extends State<ActivityPlansApp>{
 
     ),
     );
-  }
-}
-
-class ActivityPlansHomePage extends StatefulWidget {
-
-  SQLDatabase db;
-  ActivityPlansHomePage(this.db, {Key? key}) : super(key: key);
-
-  @override
-  State<ActivityPlansHomePage> createState() => _ActivityPlansHomePageState();
-}
-
-class _ActivityPlansHomePageState extends State<ActivityPlansHomePage> {
-
-
-  List<User> users = [];
-
-  @override
-  void initState() {
-    super.initState();
-
-  }
-
-  void dispose() {
-    super.dispose();
-  }
-
-  void update() async {
-    var result = await widget.db.search('users', {'cognoms': 'Gorina'});
-    if (result != null) {
-      this.setState(() {
-        users = result.map((e) => e as User).toList() as List<User>;
-      });
-    }
-  }
-
-  @override
-  Widget build(BuildContext context) {
-
-    return CupertinoPageScaffold(
-          navigationBar: CupertinoNavigationBar(
-            middle: Text("Plans de Navegació"),
-          ),
-          backgroundColor: context.canvasColor,
-          child: SafeArea(
-            child: Consumer<AppStateModel>(
-              builder: (context, model, child){
-                return "Welcome ${model.userName}".text.make();
-              }
-            ),
-
-
-          ));
-
-  }
-}
-
-class HomePage extends Page {
-
-  SQLDatabase db;
-
-  HomePage(this.db) : super(key: ValueKey('HomePage'));
-
-  @override
-  Route createRoute(BuildContext context){
-    return CupertinoPageRoute(settings: this, builder: (BuildContext context) => ActivityPlansHomePage(db));
   }
 }

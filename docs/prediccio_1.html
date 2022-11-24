@@ -1,0 +1,64 @@
+<!DOCTYPE html SYSTEM "about:legacy-compat">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:xhtml="http://www.w3.org/1999/xhtml" xml:lang="ca">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+<title>Meteocat.Generalitat de Catalunya - Predicci&oacute; mar&iacute;tima</title>
+<link href="https://fonts.googleapis.com/css?family=Open+Sans|Roboto:300,400,500,700,900" rel="stylesheet" type="text/css"/>
+<link rel="stylesheet" href="https://code.jquery.com/ui/1.10.3/themes/smoothness/jquery-ui.min.css"/>
+<link rel="stylesheet" href="../../assets-w3/stylesheets/style.min.css"/>
+<link rel="stylesheet" href="../../assets-w3/stylesheets/print.min.css" media="print"/>
+<link rel="stylesheet" href="https://static-m.meteo.cat/assets-w3/stylesheets/style.min.css"/>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js">//</script>
+<script src="https://code.jquery.com/ui/1.10.3/jquery-ui.min.js">//</script>
+</head>
+<body class="main maritim">
+<script type="text/javascript">
+				$(document).ready(function() {
+					  $(function() {
+						$("#tabs").tabs({hide: {effect: "fade", duration: "fast"}});
+					});
+				});
+        	</script>
+<a xmlns:sf="java.text.SimpleDateFormat" xmlns:cal="java.util.Calendar" name="FW_contingut">&nbsp;</a>
+<div xmlns:sf="java.text.SimpleDateFormat" xmlns:cal="java.util.Calendar" id="tabs">
+<ul>
+<li>
+<a href="#tabs-1">Costa Brava</a>
+</li>
+<li>
+<a href="#tabs-2">Costa Central</a>
+</li>
+<li>
+<a href="#tabs-3">Costa Daurada</a>
+</li>
+</ul>
+<div id="tabs-1">
+<div class="FW_sDetallGeneral">
+<p style="font-size: 10px;margin: 10px 0 20px;color: gray;">Predicci&oacute; de la sortida autom&agrave;tica del model oceanogr&agrave;fic SWAN</p>
+							
+								<a name="bravamar">&nbsp;</a>
+								<iframe src="marendinsCB.html"></iframe>
+							
+						</div>
+</div>
+<div id="tabs-2">
+<div class="FW_sDetallGeneral">
+<p style="font-size: 10px;margin: 10px 0 20px;color: gray;">Predicci&oacute; de la sortida autom&agrave;tica del model oceanogr&agrave;fic SWAN</p>
+							
+								<a name="centralmar">&nbsp;</a>
+								<iframe src="marendinsCC.html"></iframe>
+							
+						</div>
+</div>
+<div id="tabs-3">
+<div class="FW_sDetallGeneral">
+<p style="font-size: 10px;margin: 10px 0 20px;color: gray;">Predicci&oacute; de la sortida autom&agrave;tica del model oceanogr&agrave;fic SWAN</p>
+							
+							<a name="dauradamar">&nbsp;</a>
+							<iframe src="marendinsCD.html"></iframe>
+							
+						</div>
+</div>
+</div>
+</body>
+</html>

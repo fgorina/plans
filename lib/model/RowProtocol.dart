@@ -27,6 +27,66 @@ abstract class Row {
 
   operator []=(String f, dynamic value) => _values[f] = value;
 
+  String? stringValueOf(String field){
+    var v = _values[field];
+
+    if (v == null){ return null; }
+
+    return v.toString();
+  }
+
+  int? intValueOf(String field){
+    var v = _values[field];
+    if (v == null) {return null;}
+
+    if (v.runtimeType == int){
+      return v as int;
+    }
+    else if (v.runtimeType == String){
+        return int.tryParse(v) as int?;
+        return int.tryParse(v) as int?;
+    } else if (v is num){
+      return (v as num).toInt();
+    } else {
+      return null;
+    }
+  }
+
+  double? doubleValueOf(String field){
+    var v = _values[field];
+    if (v == null) {return null;}
+
+    if (v.runtimeType == double){
+      return v as double;
+    }
+    else if (v.runtimeType == String){
+      return double.tryParse(v) as double?;
+    } else if (v is num){
+      return (v as num).toDouble();
+    } else {
+      return null;
+    }
+  }
+
+
+
+  DateTime? dateValueOf(String field){
+    var v = _values[field];
+    if (v == null) {return null;}
+
+    if (v.runtimeType == DateTime){
+      return v as DateTime;
+    } else if (v.runtimeType == String){ // Should be ann ISO String
+      return DateTime.tryParse(v) as DateTime?;
+    } else if (v is num){
+      return DateTime.fromMillisecondsSinceEpoch(v.toInt()) as DateTime?;
+    } else {
+      return null;
+    }
+
+  }
+
+
   String toJSON() => json.encode(_values);
 
   Row newRow();
@@ -44,4 +104,10 @@ abstract class Row {
     return fields.map((e) => e + " : " + this[e].toString()).join(", ");
 
   }
+
+  bool isSaved(){
+    return this['id'] != null;
+  }
+
+
 }

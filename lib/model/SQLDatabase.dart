@@ -8,7 +8,7 @@ import 'dart:convert';
 
 class SQLDatabase {
 
-  String host = '127.0.0.1';
+  String host = '192.168.1.19';
   int port = 8080;
   String scheme = 'http' ;
   String basePath = 'crud/';
@@ -76,10 +76,10 @@ class SQLDatabase {
 
   }
 
-  Future<Row?> update(Row record) async{
+  Future<Row?> update(Row record, int id) async{
     var tableName = record.tableName;
 
-    String path = basePath + tableName ;
+    String path = basePath + tableName + "/" + "$id";;
     var url = Uri(scheme: scheme,host: host, port: port, path : path);
     var s = record.toJSON();
     var response = await client.put(url,headers: {'content-type' : 'application/json'} , body: s);
@@ -102,14 +102,9 @@ class SQLDatabase {
 
   }
 
-  Future<Row?> delete(Row record) async{
+  Future<Row?> delete(Row record, int id) async{
     var tableName = record.tableName;
 
-    if (record['id'] == null){
-      return null;
-    }
-
-    var id = record["id"]!;
 
     String path = basePath + tableName + "/" + "$id";
 

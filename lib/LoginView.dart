@@ -4,6 +4,8 @@ import 'Utilities.dart';
 import '/model/SQLDatabase.dart';
 import 'package:velocity_x/velocity_x.dart';
 import '/model/User.dart';
+import '/model/Pla.dart';
+
 import '/model/AppStateModel.dart';
 import 'package:provider/provider.dart';
 
@@ -91,7 +93,10 @@ class _LoginViewState extends State<LoginView> {
 
       await Future.delayed(Duration(seconds: 1));
 
-      if (user != null) {model.setUser(user);}
+      if (user != null) {
+        await model.loadPlans(widget.db, user);
+        model.setUser(user);
+      }
       else{
         setState(() {
           state = LoggedState.notLogged ;

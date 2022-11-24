@@ -9,3 +9,28 @@ extension Widgets on String{
     return Image(image: AssetImage(fullName), width: width,);
   }
 }
+
+
+extension on String? {
+
+  bool isEmpty() {
+    if (this == null){
+      return true;
+    }
+    
+    var clean = this!.replaceAll(RegExp(r"\s+"), "");
+    if (clean!.length == 0){
+      return true;
+    }
+  
+    return false;
+  }
+
+
+  bool isNotEmpty() {
+
+  return !isEmpty();
+
+  }
+}
+

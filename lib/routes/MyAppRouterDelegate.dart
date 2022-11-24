@@ -3,10 +3,14 @@ import 'package:flutter/services.dart';
 import 'package:plans/SignIn.dart';
 import 'package:plans/model/AppStateModel.dart';
 import 'package:plans/model/SQLDatabase.dart';
+import '/model/Pla.dart';
+import '/PlaView.dart';
 import '/main.dart';
 import '/LoginView.dart';
 import 'package:provider/provider.dart';
 import '/SignIn.dart';
+import '/HomePage.dart';
+import '/Maps/MapView.dart';
 
 
 class MyAppRouterDelegate extends RouterDelegate with ChangeNotifier, PopNavigatorRouterDelegateMixin {
@@ -32,7 +36,7 @@ class MyAppRouterDelegate extends RouterDelegate with ChangeNotifier, PopNavigat
   Widget build(BuildContext context) {
     List<Page> stack;
     if (model.isLogged) {
-      stack = _homeStack;
+      stack =  _homeStack;
     } else if (model.isSigningIn) {
       stack = _signInStack;
     } else {
@@ -56,10 +60,21 @@ class MyAppRouterDelegate extends RouterDelegate with ChangeNotifier, PopNavigat
   ];
 
   List<Page> get _homeStack {
-   return [
+
+   var stack =  [
      LoginPage(db),
-     HomePage(db),
+     HomePage(db, model),
+
     ];
+
+   if (model.pla != null){
+     stack.add(PlaViewPage(db, model.pla!, model));
+   }
+   if (model.isMapShown){
+     stack.add(MapPage(model));
+   }
+
+   return stack;
   }
 
 
