@@ -11,6 +11,7 @@ import 'package:provider/provider.dart';
 import '/SignIn.dart';
 import '/HomePage.dart';
 import '/Maps/MapView.dart';
+import '/ItinerariView.dart';
 
 
 class MyAppRouterDelegate extends RouterDelegate with ChangeNotifier, PopNavigatorRouterDelegateMixin {
@@ -42,15 +43,18 @@ class MyAppRouterDelegate extends RouterDelegate with ChangeNotifier, PopNavigat
     } else {
       stack = _loginStack;
     }
-    return Navigator(
+    return   Navigator(
       key: navigatorKey,
       pages: stack,
       onPopPage: (route, result) {
+        print("poping $route");
         if (!route.didPop(result)) return false;
+
 
         return true;
       },
     );
+
   }
 
   List<Page> get _loginStack => [LoginPage(db)];
@@ -70,8 +74,11 @@ class MyAppRouterDelegate extends RouterDelegate with ChangeNotifier, PopNavigat
    if (model.pla != null){
      stack.add(PlaViewPage(db, model.pla!, model));
    }
+   if(model.itinerari !=  null){
+     stack.add(ItinerariViewPage(db, model.itinerari!, model));
+   }
    if (model.isMapShown){
-     stack.add(MapPage(model));
+     stack.add(MapPage(model, db));
    }
 
    return stack;

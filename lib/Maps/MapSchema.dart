@@ -3,6 +3,8 @@ class MapSchema {
   final String schema;
   final String? clau;
   final bool transparent;
+  final String cache;
+  final bool shown;
 
-  MapSchema(this.nom, this.schema, this.clau, this.transparent);
+  MapSchema(this.nom, this.schema, this.clau, this.transparent, this.cache, this.shown);
 }

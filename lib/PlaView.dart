@@ -6,6 +6,7 @@ import '/model/Pla.dart';
 import '/model/AppStateModel.dart';
 import '/model/SQLDatabase.dart';
 import 'package:provider/provider.dart';
+import '/Maps/MapView.dart';
 
 class PlaView extends StatefulWidget {
 
@@ -17,7 +18,7 @@ class PlaView extends StatefulWidget {
 
   @override
   _PlaViewState createState() {
-    return _PlaViewState(_pla);
+    return _PlaViewState(_pla, model);
   }
 }
 
@@ -25,11 +26,61 @@ class _PlaViewState extends State<PlaView> {
 
 
   Pla _pla;
+  AppStateModel _model;
+  TextEditingController _descripcioController = TextEditingController( );
+  TextEditingController _sortidaController = TextEditingController( );
+  TextEditingController _arribadaController = TextEditingController( );
 
-  _PlaViewState(this._pla);
 
-  void doPlaOp(){
+  _PlaViewState(this._pla, this._model);
 
+  void initState(){
+    super.initState();
+    _descripcioController.text = _pla["descripcio"].toString();
+    _sortidaController.text = _pla["puntSortida"].toString();
+    _arribadaController.text = _pla["puntArribada"].toString();
+  }
+
+   void doPlaOp() async{
+
+    var _newPla = _pla.copy();
+
+    // Això es una chapuza mentre decidim com guardart l'itinerari
+    _newPla['descripcio'] = _newPla['descripcio'].toString();
+    _newPla['puntSortida'] = _newPla['puntSortida'].toString();
+    _newPla['puntArribada'] = _newPla['puntArribada'].toString();
+
+    if (_pla.isSaved()){
+      // Modify values of pla
+      await widget.db.update(_newPla, _newPla['id']!);
+    }else {
+      await widget.db.create(_newPla);
+    }
+
+  }
+
+  Future openMap(BuildContext context) async {
+
+    var options = MapViewOptions(false, false);
+    var route = CupertinoPageRoute(builder: (context) => MapView(_model, widget.db, options), title: "Map View", );
+    await Navigator.push(context, route);
+
+    setState(() {
+
+      if (_model.route.nrOfCoordinates > 0) {
+        _pla["descripcio"] = _model.route;
+        _pla["puntSortida"] = _model.route.first;
+        _pla["puntArribada"] = _model.route.last;
+      }else {
+        _pla["descripcio"] = [];
+        _pla["puntSortida"] = null;
+        _pla["puntArribada"] = null;
+      }
+      _descripcioController.text = _pla["descripcio"].toString();
+      _sortidaController.text = _pla["puntSortida"].toString();
+      _arribadaController.text = _pla["puntArribada"].toString();
+      print(_pla["descripcio"] );
+    });
   }
 
   @override
@@ -38,10 +89,12 @@ class _PlaViewState extends State<PlaView> {
       backgroundColor: context.canvasColor,
       navigationBar: CupertinoNavigationBar(
         middle: Text(_pla['nom'] ?? 'Nou Plà'),
-        trailing: CupertinoButton(
+        trailing:
+       CupertinoButton(
           onPressed: () => widget.model.editPla,
           child: Icon(CupertinoIcons.pencil),
         ),
+
       ),
       child: SafeArea(
         child: Container(
@@ -61,9 +114,9 @@ class _PlaViewState extends State<PlaView> {
                           child: CupertinoTextFormFieldRow(
                             initialValue: _pla["nom"]  ?? "",
                             placeholder: "Nom del plà",
-                            onChanged: (value) => _pla["nom"] = value,
+                            onChanged: (value) => setState((){_pla["nom"] = value;}),
                           ),
-                        prefix: "Data creat".text.make(),
+                        prefix: "Nom".text.make(),
                       ),
                       CupertinoFormRow(
                         child: CupertinoTextFormFieldRow(
@@ -85,11 +138,31 @@ class _PlaViewState extends State<PlaView> {
                     ]),
                 20.heightBox,
                 CupertinoFormSection(
-                    header: "Itinerari".text.make(),
+                    header: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: ["Itinerari".text.make(),
+
+                      Container(
+                        padding: EdgeInsets.zero,
+                        height: 40,
+                      child: CupertinoButton(child: Icon(CupertinoIcons.globe),
+                        padding: EdgeInsets.zero,
+                        onPressed: () async {
+                        await openMap(context);
+                      }, ),
+                      ),
+
+
+                    ]),
+
+
+
+
+
                     children: [
                       CupertinoFormRow(
                         child: CupertinoTextFormFieldRow(
-                          initialValue: _pla["puntSortida"]  ?? "",
+                          controller: _sortidaController,
                           placeholder: "Punt de Sortida",
                           onChanged: (value) => _pla["puntSortida"] = value,
                         ),
@@ -97,7 +170,7 @@ class _PlaViewState extends State<PlaView> {
                       ),
                       CupertinoFormRow(
                         child: CupertinoTextFormFieldRow(
-                          initialValue: _pla["puntArribada"]  ?? "",
+                          controller: _arribadaController,
                           placeholder: "Punt Arribada",
                           onChanged: (value) => _pla["puntArribada"] = value,
                         ),
@@ -105,7 +178,7 @@ class _PlaViewState extends State<PlaView> {
                       ),
                       CupertinoFormRow(
                         child: CupertinoTextFormFieldRow(
-                          initialValue: _pla.stringValueOf('descripcio') as String?,
+                          controller: _descripcioController,
                           placeholder: "Descripció itinerari",
                           onChanged: (value) => _pla["descripcio"] = value,
                           style: TextStyle(fontSize: 12,),
@@ -118,6 +191,11 @@ class _PlaViewState extends State<PlaView> {
                         prefix: "Itinerari".text.make(),
 
                       ),
+
+
+
+
+
                     ]),
 
 
@@ -181,7 +259,6 @@ class _PlaViewState extends State<PlaView> {
                     ).centered();
                   },
                 ),
-
               ],
             ),
           ),

@@ -76,6 +76,24 @@ class SQLDatabase {
 
   }
 
+  Future<List<Row>> customSearch (String tableName, String op, String searchString) async{
+
+    var table = _tables[tableName];
+    if(table == null){
+      return [];
+    }
+
+    String path = basePath + tableName + "/" + op + "/" + searchString;
+
+    var url = Uri(scheme: scheme,host: host, port: port, path : path);
+    var response = await client.get(url);
+    var body = response.body;
+    print(body);
+    List result = json.decode(body);
+    return result.map((e) => table.newRowFromMap(e)).toList();
+
+  }
+
   Future<Row?> update(Row record, int id) async{
     var tableName = record.tableName;
 

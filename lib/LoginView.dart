@@ -94,7 +94,10 @@ class _LoginViewState extends State<LoginView> {
       await Future.delayed(Duration(seconds: 1));
 
       if (user != null) {
+        model.setCurrentPla(null);
         await model.loadPlans(widget.db, user);
+        await model.loadEmbarcacions(widget.db, user);
+        await model.loadItineraris(widget.db, user);
         model.setUser(user);
       }
       else{

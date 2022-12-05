@@ -98,6 +98,10 @@ abstract class Row {
 
   }
 
+  Row copy(){
+    return newRowFromMap(this._values);
+  }
+
   String toString(){
     var fields = this.fields;
 
