@@ -9,6 +9,7 @@ import 'package:provider/provider.dart';
 import '/Maps/MapView.dart';
 import 'package:latlong2/latlong.dart';
 import '/model/PathExtension.dart';
+import 'package:geocoding/geocoding.dart';
 
 class ItinerariView extends StatefulWidget {
 
@@ -31,6 +32,9 @@ class _ItinerariViewState extends State<ItinerariView> {
   AppStateModel _model;
 
   TextEditingController _descripcioController = TextEditingController( );
+  TextEditingController _iniciController = TextEditingController( );
+  TextEditingController _finalController = TextEditingController( );
+
 
 
   _ItinerariViewState(this._itinerari, this._model);
@@ -38,6 +42,8 @@ class _ItinerariViewState extends State<ItinerariView> {
   void initState(){
     super.initState();
     _descripcioController.text = _itinerari["descripcio"].toString();
+    _iniciController.text = _itinerari["inici"].toString();
+    _finalController.text = _itinerari["final"].toString();
 
   }
 
@@ -57,14 +63,31 @@ class _ItinerariViewState extends State<ItinerariView> {
     var route = CupertinoPageRoute(builder: (context) => MapView(_model, widget.db, MapViewOptions(false, false)), title: "Entreu el recorregut", );
     await Navigator.push(context, route);
 
-    setState(() {
+    var start = _model.route.first;
+    var end = _model.route.last;
+
+    List<Placemark> placemarksInici = await placemarkFromCoordinates(start.latitude, start.longitude);
+    String nomInici = placemarksInici.length == 0 ? "" : "${placemarksInici[0].name} a ${placemarksInici[0].locality} ";
+
+    List<Placemark> placemarksFinal = await placemarkFromCoordinates(end.latitude, end.longitude);
+    String nomFinal = placemarksFinal.length == 0 ? "" : "${placemarksFinal[0].name} a ${placemarksFinal[0].locality} ";
+
+
+    setState(()  {
 
       if (_model.route.nrOfCoordinates > 0) {
         _itinerari["geo"] = _model.route;
+        _itinerari["inici"] = nomInici;
+        _itinerari["final"] = nomFinal;
+
       }else {
         _itinerari["geo"] = Path<LatLng>.from([]);
+        _itinerari["inici"] = "";
+        _itinerari["final"] = "";
       }
       _descripcioController.text = _itinerari["descripcio"].toString();
+      _iniciController.text = _itinerari["inici"].toString();
+      _finalController.text = _itinerari["final"].toString();
 
     });
   }
@@ -118,6 +141,32 @@ class _ItinerariViewState extends State<ItinerariView> {
                           onChanged: (value) => setState((){_itinerari["nom"] = value;}),
                         ),
                         prefix: "Nom".text.make(),
+                      ),
+
+                      CupertinoFormRow(
+                        child: CupertinoTextFormFieldRow(
+                          controller: _iniciController,
+                          placeholder: "Punt de sortida",
+                          enabled: false,
+                          expands: true,
+                          minLines: null,
+                          maxLines: null,
+
+                        ),
+                        prefix: "Inici".text.make(),
+                      ),
+
+                      CupertinoFormRow(
+                        child: CupertinoTextFormFieldRow(
+                          controller: _finalController,
+                          placeholder: "Punt d'arribada",
+                          enabled: false,
+                          expands: true,
+                          minLines: null,
+                          maxLines: null,
+
+                        ),
+                        prefix: "Final".text.make(),
                       ),
 
                       CupertinoFormRow(

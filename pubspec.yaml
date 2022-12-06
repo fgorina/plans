@@ -47,7 +47,7 @@ dependencies:
 
   location: ^4.2.0
   flutter_compass: ^0.7.0
-
+  geocoding: ^2.0.5
 
   geobase: ^0.4.0
   gpx: ^2.2.0

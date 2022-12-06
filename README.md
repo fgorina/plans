@@ -1,16 +1,19 @@
 # plans
 
-A new Flutter project.
+Un projecte per seguretat en caiac en grup
 
 ## Getting Started
 
-This project is a starting point for a Flutter application.
+TQuan anem en group i fa mala mar, de vegades es difícil poder mantenir-se junts i retrobar els companys, amb onades importants, es quasi imposible.
 
-A few resources to get you started if this is your first Flutter project:
+Aquesta aplicació pretén :
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
+    - Poder definir un pla de la sortida junt amb l'itinerari, participants i horaris
+    - Cada participant porta la aplicació en mode registre
+    - Si els temps es passen molt es genera un avís a la/les persones a la llista d'avisos
+    - Si en un moment ens perdem a mar el reponsable pasa a mode localitzar indicant un participant.
+        - Les actualitzacions es fan mes ràpides
+        - La pantalla ens indica dades com la direcció a on es el company, la distància i dades de velocitat 
+        - Amb això podem o be anar a cercar-lo o valorar la situació
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+    

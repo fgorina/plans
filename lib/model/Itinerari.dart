@@ -13,6 +13,8 @@ class Itinerari extends Row{
     'descripcio',
     'creador',
     'geo',
+    'inici',
+    'final',
   ];
 
   @override String get tableName => Itinerari._tableName;
